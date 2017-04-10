@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <title>登录</title>
+    <script type="text/javascript" src="../js/md5.js"></script>
+    <style type="text/css">
+        #mid{
+             width:300px;
+             height:200px;
+             position:absolute;
+             left:50%;
+             top:50%;
+             margin:-100px 0 0 -150px
+         }
+        #login {
+            position: absolute;
+            top: 0px;
+            width: 70%;
+            padding: 18px 6% 0px 6%;
+            margin: 0 0 35px 0;
+            background: rgb(247, 247, 247);
+            border: 1px solid rgba(147, 184, 189, 0.8);
+            box-shadow: 0pt 2px 5px rgba(105, 108, 109, 0.7),
+            0px 0px 8px 5px rgba(208, 223, 226, 0.4) inset;
+            border-radius: 5px;
+        }
+    </style>
+
+    <script type="text/javascript">
+        function checkForm(form){
+            if(form.account.value.trim()==""){
+                alert("用户名不能为空！");
+                form.account.focus();
+                return false;
+            }else if(form.password.value.trim()==""){
+                alert("密码不能为空！");
+                form.password.focus();
+                return false;
+            }else if(form.vcode.value == "") {
+                alert("请输入验证码");
+                form.vcode.focus();
+                return false;
+            }
+            var ps = form.password.value;
+            var md5_ps = hex_md5(ps);
+            document.getElementById('password').value = md5_ps;
+            return true;
+        }
+    </script>
+    <!--ajax方式提交验证码 获取不到返回json串？WHY？？？？？？？-->
+    <!--<script type="text/javascript" src="../js/jquery-3.2.0.min.js">
+        function code(form){
+            var a = form.vcode.value;
+            $.ajax({
+                type:"get",
+                url:"../php/login.php",
+                dataType:"json",
+                data:{name:a},
+                success:function(msg){
+                    if(msg = json.constructor("1")){
+                        alert("验证码错误!");
+                        return false;
+                    }else{
+                        return true;
+                    }
+                }
+                });
+
+        }
+    </script>-->
+</head>
+<body>
+
+<div id="mid"><div id="login">
+    <form id="form" method="get" action="../php/login.php" onsubmit="return checkForm(this)">
+        <input type="text"   id="account" name="account" placeholder="请输入账号" style="width:200px;height:15px;" ><br/><br/>
+        <input type="password"  id="password" name="password" placeholder="请输入密码" style="width:200px;height:15px;"><br/><br/>
+        <input type="text"   id="vcode" name="vcode" placeholder="请输入验证码"  style="width:90px;height:15px;">
+        <img id="yzm" name="yzm" src="../php/yzm.php?r=<?php echo rand();?>" style="width:100px;height:25px;"><br/>
+        <small>看不清?</small><a href onclick="document.getElementById('yzm').src='../php/yzm.php?r='+Math().random()"><small>换一个</small></a>
+        <input type="submit" id="submit" value="登录" style="width:200px;"/>
+    <ul>
+            <small>没有账号?</small><a href="register.html"><small>注册</small></a><small>一个吧!</small>
+    </ul>
+    </form>
+</div></div>
+</body>
+</html>
