@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>注册页面</title>
+    <script language="JavaScript" src="../js/jquery-3.2.0.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function(){
+            checkConfirm();
+            checkEmail();
+        })
+        //验证用户名是否存在
+        function checkConfirm(){
+            $('#raccount').blur(function (){
+                var ra = $(this).val();
+                var url = "../php/Confirm.php?action=check&raccount="+ra;
+                $.get(url,function(str){
+                    if(str=='1'){
+                        $('#Info').html("<small>用户名已存在，请重新输入！</small>");
+                    }else{
+                        $("#Info").html("<small>用户名可用！</small>");
+                    }
+                })
+                return false;
+            })
+        }
+        function checkEmail() {
+            $('#email').blur(function(){
+                var el = $(this).val();
+                var url = "../php/checkEmail.php?action=check&email="+el;
+                $.get(url,function(str){
+                    if(str=='1'){
+                        $('#einfo').html("<small>邮箱已注册！</small>");
+                    }else{
+                        $('#einfo').html("<small>邮箱可用！</small>");
+                    }
+                })
+                return false;
+            })
+        }
+    </script>
+    <script type="text/javascript" src="../js/jquery.autoMiddle.js">
+        $(function(){
+            $("").autoMiddle();
+        });
+    </script>
+    <style type="text/css">
+        #mid{
+            width:300px;
+            height:200px;
+            position:absolute;
+            left:50%;
+            top:50%;
+            margin:-100px 0 0 -150px
+        }
+        #login {
+            position: absolute;
+            top: 0px;
+            width: 70%;
+            padding: 18px 6% 0px 6%;
+            margin: 0 0 35px 0;
+            background: rgb(247, 247, 247);
+            border: 1px solid rgba(147, 184, 189, 0.8);
+            box-shadow: 0pt 2px 5px rgba(105, 108, 109, 0.7),
+            0px 0px 8px 5px rgba(208, 223, 226, 0.4) inset;
+            border-radius: 5px;
+        }
+    </style>
+    <script type="text/javascript">
+        function checkForm(form){
+            var passwordRegex =  /^\w{6,18}$/;
+           /* var emailRegex = "^[_.0-9a-z-]+@([0-9a-z][0-9a-z-]+.)+[a-z]{2,3}$";*/
+            if(form.raccount.value.trim()==""){
+                alert("用户名不能为空！");
+                form.raccount.focus();
+                return false;
+            }else if(form.rpassword.value.trim()==""){
+                alert("密码不能为空！");
+                form.rpassword.focus();
+                return false;
+            }else if(form.rpassword1.value.trim()==""){
+                alert("请再次输入密码！");
+                form.rpassword1.focus();
+                return false;
+            }else if(!passwordRegex.test(form.rpassword.value)){
+                alert("密码应为6-16位!");
+                form.rpassword.focus();
+                return false;
+            }else if(form.rpassword.value != form.rpassword1.value){
+                alert("两次密码输入不一致，请重新输入！");
+                form.rpassword.focus();
+                return false;
+            }else if(form.email.value.trim() == ""){
+                alert("邮箱不能为空！");
+                form.email.focus();
+                return false;
+            }
+            return true;
+        }
+    </script>
+   <!-- <script type="text/javascript">
+        function c(form){
+            var ps = form.rpassword.value;
+            alert(ps);
+        }
+    </script>-->
+</head>
+<body onresize="getsize()" onload="firstLoad()">
+<!--注册账号密码输入表单-->
+<div id="mid">
+    <div id="login">
+        <form action="../php/register.php" method="get" id="form" onsubmit="return checkForm(this)">
+             <input type="text" name="raccount" id="raccount" placeholder="输入账号" style="width:200px;height:15px;"><br/>
+            <span id="Info" style="color: #ff0000;"></span><br/>
+            <input type="email" name="email" id="email"  placeholder="请输入邮箱" style="width:200px;height: 15px;"><br/>
+            <span id="einfo" style="color: #ff0000;"></span><br/>
+            <input type="password" name="rpassword"  placeholder="输入密码"style="width:200px;height:15px;"><br/><br/>
+            <input type="password" name="rpassword1" placeholder="再次输入密码" style="width:200px;height:15px;"><br/><br/>
+            <input type="submit" id="submit" value="注册" style="width:200px;" >
+            <ul>
+                <small>已经有账号，去</small><a href="login.html"><small>登录</small></a>
+            </ul>
+        </form>
+    </div>
+</div>
+
+</body>
+</html>
